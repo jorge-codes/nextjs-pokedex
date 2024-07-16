@@ -3,11 +3,10 @@ import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardFooter, CardTitle } from '@/components/ui/card';
 
 import { PokemonItem } from '@/types/pokemon';
 import { getPokemonList } from '@/services/apiService';
-import { ButtonIcon, PlusIcon } from '@radix-ui/react-icons';
+import { Thumbnail } from '@/components/thumbnail';
 
 export default function Home() {
   const [pokemonList, setPokemonList] = useState<PokemonItem[]>([]);
@@ -29,6 +28,13 @@ export default function Home() {
     fetchPokemonList();
   }, []);
 
+  const handleButtonClick = (id: string) => {
+    console.log(`PAGE: Clicked on BUTTON ${id}`);
+  };
+  const handleThumbnailClick = (id: string) => {
+    console.log(`PAGE: Clicked on ${id}`);
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
@@ -45,20 +51,13 @@ export default function Home() {
       {/* Pokémon grid */}
       <section className='grid grid-cols-3 gap-4'>
         {pokemonList.map((pokemon, index) => (
-          <Card key={pokemon.name}>
-            <CardHeader>
-              <CardTitle>{pokemon.name}</CardTitle>
-              <CardDescription>#{(index + 1).toString().padStart(3, '0')}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div>image here</div>
-            </CardContent>
-            <CardFooter>
-              <Button className='float-right clear-both mt-2 mr-2' variant='outline' size='icon'>
-                <PlusIcon />
-              </Button>
-            </CardFooter>
-          </Card>
+          <Thumbnail
+            key={pokemon.name}
+            id={(index + 1).toString()}
+            name={pokemon.name}
+            onClicked={handleThumbnailClick}
+            onButtonClicked={handleButtonClick}
+          />
         ))}
       </section>
     </main>
