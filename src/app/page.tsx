@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardFooter, CardTitle } from '@/components/ui/card';
 
 import { PokemonItem } from '@/types/pokemon';
 import { getPokemonList } from '@/services/apiService';
+import { ButtonIcon, PlusIcon } from '@radix-ui/react-icons';
 
 export default function Home() {
   const [pokemonList, setPokemonList] = useState<PokemonItem[]>([]);
@@ -44,13 +45,20 @@ export default function Home() {
       {/* Pokémon grid */}
       <section className='grid grid-cols-3 gap-4'>
         {pokemonList.map((pokemon, index) => (
-          <div key={pokemon.name} className='flex flex-col items-center space-y-2'>
-            <div className='flex items-center space-x-2'>
-              {/* <img src={pokemon.url} alt={pokemon.name} className='w-12 h-12 rounded-full' /> */}
-              <h4 className='text-xl font-bold'>{pokemon.name}</h4>
-            </div>
-            <p className='text-sm text-muted-foreground'>#{(index + 1).toString().padStart(3, '0')}</p>
-          </div>
+          <Card key={pokemon.name}>
+            <CardHeader>
+              <CardTitle>{pokemon.name}</CardTitle>
+              <CardDescription>#{(index + 1).toString().padStart(3, '0')}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div>image here</div>
+            </CardContent>
+            <CardFooter>
+              <Button className='float-right clear-both mt-2 mr-2' variant='outline' size='icon'>
+                <PlusIcon />
+              </Button>
+            </CardFooter>
+          </Card>
         ))}
       </section>
     </main>
