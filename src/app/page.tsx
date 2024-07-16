@@ -1,6 +1,10 @@
 'use client';
-
 import { useEffect, useState } from 'react';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card';
+
 import { PokemonItem } from '@/types/pokemon';
 import { getPokemonList } from '@/services/apiService';
 
@@ -11,12 +15,9 @@ export default function Home() {
 
   useEffect(() => {
     const fetchPokemonList = async () => {
-      console.log('fetchPokemonList');
       try {
-        const data = await getPokemonList(5000);
-        console.log(data);
+        const data = await getPokemonList();
         setPokemonList(data.results);
-        // setPokemonList(data);
       } catch (error) {
         setError('Failed to fetch Pokémon list');
       } finally {
@@ -27,22 +28,31 @@ export default function Home() {
     fetchPokemonList();
   }, []);
 
-  console.log(`API Base URL: `, process.env.NEXT_PUBLIC_API_BASE_URL);
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
   return (
     <main className='prose'>
-      <h1>It works!</h1>
-      <p>List of the first 151 Pokémons</p>
-      <ul>
+      {/* Heading */}
+      <h1 className='scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl'>Pokédex</h1>
+      <p className='text-sm text-muted-foreground'>by @jorge_codes</p>
+      {/* Search bar */}
+      <section className='flex w-full max-w-sm items-center space-x-2 mb-8 mt-6'>
+        <Input type='text' placeholder='Search by name or number' />
+        <Button type='submit'>Go</Button>
+      </section>
+      {/* Pokémon grid */}
+      <section className='grid grid-cols-3 gap-4'>
         {pokemonList.map((pokemon, index) => (
-          <li key={pokemon.name}>
-            {(index + 1).toString().padStart(3, '0')}- {pokemon.name}
-          </li>
+          <div key={pokemon.name} className='flex flex-col items-center space-y-2'>
+            <div className='flex items-center space-x-2'>
+              {/* <img src={pokemon.url} alt={pokemon.name} className='w-12 h-12 rounded-full' /> */}
+              <h4 className='text-xl font-bold'>{pokemon.name}</h4>
+            </div>
+            <p className='text-sm text-muted-foreground'>#{(index + 1).toString().padStart(3, '0')}</p>
+          </div>
         ))}
-      </ul>
+      </section>
     </main>
   );
 }

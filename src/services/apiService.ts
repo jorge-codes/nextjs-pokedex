@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-const POKEMON_LIMIT = 151;
+const DEFAULT_POKEMON_LIMIT = 151;
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -9,19 +9,44 @@ const api = axios.create({
   },
 });
 
-// TODO: interceptors for request if necessary using AxiosResponse
+function showRequestConfig(config: AxiosRequestConfig): void {
+  if (process.env.NODE_ENV !== 'development') return;
+
+  console.log('REQUEST DETAILS');
+  console.log('\tbaseURL:', config.baseURL);
+}
+
+function showResponseDetails(response: AxiosResponse): void {
+  if (process.env.NODE_ENV !== 'development') return;
+
+  console.log('RESPONSE DETAILS');
+  console.log('\tstatus: ', response.status);
+  console.log('\tdata: ', response.data);
+}
+
+// interceptors for request if necessary
 api.interceptors.request.use(
-  (config) => {
-    // console.log('request config', config);
-    return config;
+  (request) => {
+    showRequestConfig(request);
+    return request;
   },
   (error) => {
     return Promise.reject(error);
   }
 );
-// TODO: interceptors for response if necessary using AxiosResponse
 
-export const getPokemonList = async (limit: number = POKEMON_LIMIT, offset: number = 0) => {
+// interceptors for response if necessary
+api.interceptors.response.use(
+  (response: AxiosResponse) => {
+    showResponseDetails(response);
+    return response;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+export const getPokemonList = async (limit: number = DEFAULT_POKEMON_LIMIT, offset: number = 0) => {
   const url = `pokemon?limit=${limit}&offset=${offset}`;
   try {
     const response = await api.get(url);

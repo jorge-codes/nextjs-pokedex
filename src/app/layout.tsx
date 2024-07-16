@@ -1,12 +1,14 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
+import type { Metadata } from 'next';
+import { Inter as FontSans } from 'next/font/google';
 
-const inter = Inter({ subsets: ['latin'] });
+// Configurations for shadcn/ui
+import { cn } from '@/lib/utils';
+const fontSans = FontSans({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
-  title: 'Pokédex',
-  description: 'Small pokédex project by Jorge Palacios',
+  title: 'Pokédex by @jorge_codes',
+  description: 'Small pokédex project by Jorge Palacios @jorge_codes',
 };
 
 export default function RootLayout({
@@ -16,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={inter.className}>{children}</body>
+      <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>{children}</body>
     </html>
   );
 }
