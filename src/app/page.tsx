@@ -6,12 +6,17 @@ import { Input } from '@/components/ui/input';
 
 import { PokemonItem } from '@/types/pokemon';
 import { getPokemonList } from '@/services/apiService';
+import { addPokemon, removePokemon } from '@/redux/partySlice';
 import { Thumbnail } from '@/components/thumbnail';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 
 export default function Home() {
   const [pokemonList, setPokemonList] = useState<PokemonItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const dispatch = useAppDispatch();
+  const party = useAppSelector((state) => state.party);
 
   useEffect(() => {
     const fetchPokemonList = async () => {
@@ -28,9 +33,14 @@ export default function Home() {
     fetchPokemonList();
   }, []);
 
-  const handleButtonClick = (id: string) => {
-    console.log(`PAGE: Clicked on BUTTON ${id}`);
+  const handleButtonClick = (id: string, inParty: boolean) => {
+    if (inParty) {
+      dispatch(removePokemon(id));
+    } else {
+      dispatch(addPokemon(id));
+    }
   };
+
   const handleThumbnailClick = (id: string) => {
     console.log(`PAGE: Clicked on ${id}`);
   };
@@ -53,8 +63,9 @@ export default function Home() {
         {pokemonList.map((pokemon, index) => (
           <Thumbnail
             key={pokemon.name}
-            id={(index + 1).toString()}
+            id={pokemon.id}
             name={pokemon.name}
+            party={party.selected.includes(pokemon.id)}
             onClicked={handleThumbnailClick}
             onButtonClicked={handleButtonClick}
           />

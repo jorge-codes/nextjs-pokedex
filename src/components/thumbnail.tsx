@@ -13,7 +13,7 @@ interface ThumbnailProps {
   img: string | undefined;
   party: boolean;
   onClicked?: (id: string) => void;
-  onButtonClicked?: (id: string) => void;
+  onButtonClicked?: (id: string, party: boolean) => void;
 }
 
 export const Thumbnail: React.FC<ThumbnailProps> = ({ id, name, img, url, party, onClicked, onButtonClicked }) => {
@@ -23,7 +23,7 @@ export const Thumbnail: React.FC<ThumbnailProps> = ({ id, name, img, url, party,
 
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.stopPropagation();
-    onButtonClicked?.(id);
+    onButtonClicked?.(id, party);
   };
 
   const buttonVariant = party ? 'default' : 'outline';
@@ -44,7 +44,7 @@ export const Thumbnail: React.FC<ThumbnailProps> = ({ id, name, img, url, party,
         {/* <Image src={src} alt={alt} width={width} height={height} layout='responsive' objectFit='cover' /> */}
       </CardContent>
       <CardFooter>
-        <CardDescription>#{id.toString().padStart(3, '0')}</CardDescription>
+        <CardDescription>#{id.padStart(3, '0')}</CardDescription>
       </CardFooter>
     </Card>
   );
