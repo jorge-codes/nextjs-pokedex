@@ -9,14 +9,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardFooter, CardTitle }
 interface ThumbnailProps {
   id: string;
   name: string;
-  url: string;
-  img: string | undefined;
+  img: string;
   party: boolean;
   onClicked?: (id: string) => void;
   onButtonClicked?: (id: string, party: boolean) => void;
 }
 
-export const Thumbnail: React.FC<ThumbnailProps> = ({ id, name, img, url, party, onClicked, onButtonClicked }) => {
+export const Thumbnail: React.FC<ThumbnailProps> = ({ id, name, img, party, onClicked, onButtonClicked }) => {
   const handleThumbnailClick = () => {
     onClicked?.(id);
   };
@@ -26,6 +25,7 @@ export const Thumbnail: React.FC<ThumbnailProps> = ({ id, name, img, url, party,
     onButtonClicked?.(id, party);
   };
 
+  const altText = `Image of ${name}`;
   const buttonVariant = party ? 'default' : 'outline';
   return (
     <Card onClick={handleThumbnailClick}>
@@ -40,8 +40,8 @@ export const Thumbnail: React.FC<ThumbnailProps> = ({ id, name, img, url, party,
       <CardHeader>
         <CardTitle className='capitalize'>{name}</CardTitle>
       </CardHeader>
-      <CardContent>
-        {/* <Image src={src} alt={alt} width={width} height={height} layout='responsive' objectFit='cover' /> */}
+      <CardContent className='flex justify-center'>
+        <Image src={img} alt={altText} height={100} width={100} />
       </CardContent>
       <CardFooter>
         <CardDescription>#{id.padStart(3, '0')}</CardDescription>

@@ -58,10 +58,13 @@ api.interceptors.response.use(
 
 export const getPokemonList = async (limit: number = DEFAULT_POKEMON_LIMIT, offset: number = 0) => {
   const url = `pokemon?limit=${limit}&offset=${offset}`;
+  const imgPrefix = process.env.NEXT_PUBLIC_IMG_BASE_URL;
   try {
     const response = await api.get(url);
     response.data.results.forEach((pokemon: any) => {
-      pokemon.id = getIdFromUrl(pokemon.url);
+      const id = getIdFromUrl(pokemon.url);
+      pokemon.id = id;
+      pokemon.img = imgPrefix + id + '.png';
     });
     return response.data;
   } catch (error) {

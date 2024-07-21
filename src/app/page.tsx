@@ -59,12 +59,13 @@ export default function Home() {
         <Button type='submit'>Go</Button>
       </section>
       {/* Pokémon grid */}
-      <section className='grid grid-cols-3 gap-4'>
+      <section className='grid md:grid-cols-3 sm:grid-cols-2 gap-4 pr-4 pl-4'>
         {pokemonList.map((pokemon, index) => (
           <Thumbnail
             key={pokemon.name}
             id={pokemon.id}
             name={pokemon.name}
+            img={pokemon.img}
             party={party.selected.includes(pokemon.id)}
             onClicked={handleThumbnailClick}
             onButtonClicked={handleButtonClick}
